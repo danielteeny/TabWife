@@ -5,7 +5,7 @@ let duplicateCache = new Set();
 
 // Initialize background script
 browser.runtime.onInstalled.addListener(async () => {
-  console.log('TabWrangler installed');
+  console.log('TabWife installed');
   await loadSettings();
 });
 

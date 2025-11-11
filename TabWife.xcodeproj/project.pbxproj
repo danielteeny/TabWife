@@ -7,16 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44ABA7AB2EC2D53400A56F46 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ABA7AA2EC2D53400A56F46 /* AppDelegate.swift */; };
-		44ABA7AF2EC2D53400A56F46 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 44ABA7AD2EC2D53400A56F46 /* Main.html */; };
-		44ABA7B12EC2D53400A56F46 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 44ABA7B02EC2D53400A56F46 /* Icon.png */; };
-		44ABA7B32EC2D53400A56F46 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 44ABA7B22EC2D53400A56F46 /* Style.css */; };
-		44ABA7B52EC2D53400A56F46 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 44ABA7B42EC2D53400A56F46 /* Script.js */; };
-		44ABA7B72EC2D53400A56F46 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ABA7B62EC2D53400A56F46 /* ViewController.swift */; };
-		44ABA7BA2EC2D53400A56F46 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44ABA7B82EC2D53400A56F46 /* Main.storyboard */; };
-		44ABA7BC2EC2D53500A56F46 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44ABA7BB2EC2D53500A56F46 /* Assets.xcassets */; };
-		44ABA7C32EC2D53500A56F46 /* TabWrangler Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 44ABA7C22EC2D53500A56F46 /* TabWrangler Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		44ABA7C82EC2D53500A56F46 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ABA7C72EC2D53500A56F46 /* SafariWebExtensionHandler.swift */; };
+		44ABA7C32EC2D53500A56F46 /* TabWife Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 44ABA7C22EC2D53500A56F46 /* TabWife Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,7 +16,7 @@
 			containerPortal = 44ABA79F2EC2D53400A56F46 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 44ABA7C12EC2D53500A56F46;
-			remoteInfo = "TabWrangler Extension";
+			remoteInfo = "TabWife Extension";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -36,7 +27,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				44ABA7C32EC2D53500A56F46 /* TabWrangler Extension.appex in Embed Foundation Extensions */,
+				44ABA7C32EC2D53500A56F46 /* TabWife Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -44,20 +35,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		44ABA7A72EC2D53400A56F46 /* TabWrangler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TabWrangler.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		44ABA7AA2EC2D53400A56F46 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		44ABA7AE2EC2D53400A56F46 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
-		44ABA7B02EC2D53400A56F46 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		44ABA7B22EC2D53400A56F46 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
-		44ABA7B42EC2D53400A56F46 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
-		44ABA7B62EC2D53400A56F46 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		44ABA7B92EC2D53400A56F46 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		44ABA7BB2EC2D53500A56F46 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		44ABA7BD2EC2D53500A56F46 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		44ABA7C22EC2D53500A56F46 /* TabWrangler Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TabWrangler Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		44ABA7C72EC2D53500A56F46 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
-		44ABA7C92EC2D53500A56F46 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44ABA7A72EC2D53400A56F46 /* TabWife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TabWife.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		44ABA7C22EC2D53500A56F46 /* TabWife Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TabWife Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		44F0F18B2EC348EE001E20EE /* TabWife */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TabWife;
+			sourceTree = "<group>";
+		};
+		44F0F1B22EC34903001E20EE /* TabWife Extension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "TabWife Extension";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		44ABA7A42EC2D53400A56F46 /* Frameworks */ = {
@@ -80,8 +73,8 @@
 		44ABA79E2EC2D53400A56F46 = {
 			isa = PBXGroup;
 			children = (
-				44ABA7A92EC2D53400A56F46 /* TabWrangler */,
-				44ABA7C62EC2D53500A56F46 /* TabWrangler Extension */,
+				44F0F1B22EC34903001E20EE /* TabWife Extension */,
+				44F0F18B2EC348EE001E20EE /* TabWife */,
 				44ABA7A82EC2D53400A56F46 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,60 +82,18 @@
 		44ABA7A82EC2D53400A56F46 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				44ABA7A72EC2D53400A56F46 /* TabWrangler.app */,
-				44ABA7C22EC2D53500A56F46 /* TabWrangler Extension.appex */,
+				44ABA7A72EC2D53400A56F46 /* TabWife.app */,
+				44ABA7C22EC2D53500A56F46 /* TabWife Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		44ABA7A92EC2D53400A56F46 /* TabWrangler */ = {
-			isa = PBXGroup;
-			children = (
-				44ABA7AA2EC2D53400A56F46 /* AppDelegate.swift */,
-				44ABA7B62EC2D53400A56F46 /* ViewController.swift */,
-				44ABA7B82EC2D53400A56F46 /* Main.storyboard */,
-				44ABA7BB2EC2D53500A56F46 /* Assets.xcassets */,
-				44ABA7BD2EC2D53500A56F46 /* Info.plist */,
-				44ABA7AC2EC2D53400A56F46 /* Resources */,
-			);
-			path = TabWrangler;
-			sourceTree = "<group>";
-		};
-		44ABA7AC2EC2D53400A56F46 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				44ABA7AD2EC2D53400A56F46 /* Main.html */,
-				44ABA7B02EC2D53400A56F46 /* Icon.png */,
-				44ABA7B22EC2D53400A56F46 /* Style.css */,
-				44ABA7B42EC2D53400A56F46 /* Script.js */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		44ABA7C62EC2D53500A56F46 /* TabWrangler Extension */ = {
-			isa = PBXGroup;
-			children = (
-				44ABA7D32EC2D53600A56F46 /* Resources */,
-				44ABA7C72EC2D53500A56F46 /* SafariWebExtensionHandler.swift */,
-				44ABA7C92EC2D53500A56F46 /* Info.plist */,
-			);
-			path = "TabWrangler Extension";
-			sourceTree = "<group>";
-		};
-		44ABA7D32EC2D53600A56F46 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Resources;
-			path = "TabWrangler Extension";
-			sourceTree = SOURCE_ROOT;
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		44ABA7A62EC2D53400A56F46 /* TabWrangler */ = {
+		44ABA7A62EC2D53400A56F46 /* TabWife */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 44ABA7D02EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWrangler" */;
+			buildConfigurationList = 44ABA7D02EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWife" */;
 			buildPhases = (
 				44ABA7A32EC2D53400A56F46 /* Sources */,
 				44ABA7A42EC2D53400A56F46 /* Frameworks */,
@@ -154,16 +105,19 @@
 			dependencies = (
 				44ABA7C52EC2D53500A56F46 /* PBXTargetDependency */,
 			);
-			name = TabWrangler;
+			fileSystemSynchronizedGroups = (
+				44F0F18B2EC348EE001E20EE /* TabWife */,
+			);
+			name = TabWife;
 			packageProductDependencies = (
 			);
-			productName = TabWrangler;
-			productReference = 44ABA7A72EC2D53400A56F46 /* TabWrangler.app */;
+			productName = TabWife;
+			productReference = 44ABA7A72EC2D53400A56F46 /* TabWife.app */;
 			productType = "com.apple.product-type.application";
 		};
-		44ABA7C12EC2D53500A56F46 /* TabWrangler Extension */ = {
+		44ABA7C12EC2D53500A56F46 /* TabWife Extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 44ABA7CC2EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWrangler Extension" */;
+			buildConfigurationList = 44ABA7CC2EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWife Extension" */;
 			buildPhases = (
 				44ABA7BE2EC2D53500A56F46 /* Sources */,
 				44ABA7BF2EC2D53500A56F46 /* Frameworks */,
@@ -173,11 +127,14 @@
 			);
 			dependencies = (
 			);
-			name = "TabWrangler Extension";
+			fileSystemSynchronizedGroups = (
+				44F0F1B22EC34903001E20EE /* TabWife Extension */,
+			);
+			name = "TabWife Extension";
 			packageProductDependencies = (
 			);
-			productName = "TabWrangler Extension";
-			productReference = 44ABA7C22EC2D53500A56F46 /* TabWrangler Extension.appex */;
+			productName = "TabWife Extension";
+			productReference = 44ABA7C22EC2D53500A56F46 /* TabWife Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -198,7 +155,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 44ABA7A22EC2D53400A56F46 /* Build configuration list for PBXProject "TabWrangler" */;
+			buildConfigurationList = 44ABA7A22EC2D53400A56F46 /* Build configuration list for PBXProject "TabWife" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -212,8 +169,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				44ABA7A62EC2D53400A56F46 /* TabWrangler */,
-				44ABA7C12EC2D53500A56F46 /* TabWrangler Extension */,
+				44ABA7A62EC2D53400A56F46 /* TabWife */,
+				44ABA7C12EC2D53500A56F46 /* TabWife Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -223,12 +180,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44ABA7B12EC2D53400A56F46 /* Icon.png in Resources */,
-				44ABA7BA2EC2D53400A56F46 /* Main.storyboard in Resources */,
-				44ABA7B52EC2D53400A56F46 /* Script.js in Resources */,
-				44ABA7AF2EC2D53400A56F46 /* Main.html in Resources */,
-				44ABA7BC2EC2D53500A56F46 /* Assets.xcassets in Resources */,
-				44ABA7B32EC2D53400A56F46 /* Style.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,8 +197,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44ABA7B72EC2D53400A56F46 /* ViewController.swift in Sources */,
-				44ABA7AB2EC2D53400A56F46 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,7 +204,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44ABA7C82EC2D53500A56F46 /* SafariWebExtensionHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,29 +212,10 @@
 /* Begin PBXTargetDependency section */
 		44ABA7C52EC2D53500A56F46 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 44ABA7C12EC2D53500A56F46 /* TabWrangler Extension */;
+			target = 44ABA7C12EC2D53500A56F46 /* TabWife Extension */;
 			targetProxy = 44ABA7C42EC2D53500A56F46 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		44ABA7AD2EC2D53400A56F46 /* Main.html */ = {
-			isa = PBXVariantGroup;
-			children = (
-				44ABA7AE2EC2D53400A56F46 /* Base */,
-			);
-			name = Main.html;
-			sourceTree = "<group>";
-		};
-		44ABA7B82EC2D53400A56F46 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				44ABA7B92EC2D53400A56F46 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		44ABA7CA2EC2D53500A56F46 /* Debug */ = {
@@ -418,8 +347,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TabWrangler Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "TabWrangler Extension";
+				INFOPLIST_FILE = "TabWife Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "TabWife Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -432,7 +361,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWrangler.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWife.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -454,8 +383,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TabWrangler Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "TabWrangler Extension";
+				INFOPLIST_FILE = "TabWife Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "TabWife Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -468,7 +397,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWrangler.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWife.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -493,8 +422,8 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TabWrangler/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TabWrangler;
+				INFOPLIST_FILE = TabWife/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TabWife;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -509,7 +438,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWrangler;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -535,8 +464,8 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TabWrangler/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TabWrangler;
+				INFOPLIST_FILE = TabWife/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TabWife;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -551,7 +480,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWrangler;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourCompany.TabWife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -566,7 +495,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		44ABA7A22EC2D53400A56F46 /* Build configuration list for PBXProject "TabWrangler" */ = {
+		44ABA7A22EC2D53400A56F46 /* Build configuration list for PBXProject "TabWife" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				44ABA7CA2EC2D53500A56F46 /* Debug */,
@@ -575,7 +504,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		44ABA7CC2EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWrangler Extension" */ = {
+		44ABA7CC2EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWife Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				44ABA7CD2EC2D53500A56F46 /* Debug */,
@@ -584,7 +513,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		44ABA7D02EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWrangler" */ = {
+		44ABA7D02EC2D53500A56F46 /* Build configuration list for PBXNativeTarget "TabWife" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				44ABA7D12EC2D53500A56F46 /* Debug */,

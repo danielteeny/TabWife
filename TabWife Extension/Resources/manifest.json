@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "TabWrangler",
+  "name": "TabWife",
   "version": "1.0.0",
-  "description": "Powerful tab organization and deduplication tool for Safari",
+  "description": "Keeps your tabs tidy and organized",
 
   "icons": {
     "16": "icons/icon-16.png",
@@ -19,7 +19,7 @@
       "48": "icons/icon-48.png",
       "128": "icons/icon-128.png"
     },
-    "default_title": "TabWrangler"
+    "default_title": "TabWife"
   },
 
   "background": {

@@ -1,6 +1,6 @@
-# TabWrangler
+# TabWife
 
-A powerful Safari extension for organizing and managing browser tabs. TabWrangler helps you find and close duplicate tabs, organize tabs by domain, and save/restore browsing sessions.
+A Safari extension that keeps your tabs tidy and organized. Like a trad wife, TabWife cleans up after you - finding and closing duplicate tabs, organizing tabs by domain, and managing your browsing sessions.
 
 ## Features
 
@@ -29,7 +29,7 @@ A powerful Safari extension for organizing and managing browser tabs. TabWrangle
 
 ### ⚙️ Customizable Match Modes
 
-TabWrangler offers six different match modes to suit your needs:
+TabWife offers six different match modes to suit your needs:
 
 1. **Exact URL** - Complete URL must match exactly
 2. **Full Path** (default) - Host + port + path + query parameters
@@ -56,13 +56,13 @@ TabWrangler offers six different match modes to suit your needs:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/danielteeny/TabWrangler.git
-   cd TabWrangler
+   git clone https://github.com/danielteeny/TabWife.git
+   cd TabWife
    ```
 
 2. Open the project in Xcode:
    ```bash
-   open TabWrangler.xcodeproj
+   open TabWife.xcodeproj
    ```
 
 3. Build and run the project in Xcode (⌘R)
@@ -70,14 +70,14 @@ TabWrangler offers six different match modes to suit your needs:
 4. Enable the extension in Safari:
    - Open Safari Preferences (⌘,)
    - Go to the "Extensions" tab
-   - Enable "TabWrangler"
+   - Enable "TabWife"
    - Grant necessary permissions when prompted
 
 ## Usage
 
-### Accessing TabWrangler
+### Accessing TabWife
 
-Click the TabWrangler icon in Safari's toolbar to open the popup interface.
+Click the TabWife icon in Safari's toolbar to open the popup interface.
 
 ### Finding Duplicates
 
@@ -118,13 +118,13 @@ Settings are automatically saved when changed, and the duplicate list updates im
 ## Project Structure
 
 ```
-TabWrangler/
-├── TabWrangler/                    # Main macOS app wrapper
+TabWife/
+├── TabWife/                    # Main macOS app wrapper
 │   ├── AppDelegate.swift          # App lifecycle management
 │   ├── ViewController.swift       # Main view controller
 │   └── Resources/                 # App resources
 │
-├── TabWrangler Extension/         # Safari extension
+├── TabWife Extension/         # Safari extension
 │   ├── SafariWebExtensionHandler.swift  # Native message handler
 │   └── Resources/
 │       ├── manifest.json          # Extension manifest
@@ -139,7 +139,7 @@ TabWrangler/
 │       └── utils/
 │           └── tabUtils.js        # Tab matching utilities
 │
-└── TabWrangler.xcodeproj/         # Xcode project
+└── TabWife.xcodeproj/         # Xcode project
 ```
 
 ## Technical Details
@@ -191,7 +191,7 @@ TabWrangler/
 
 ### Adding New Features
 
-1. Extension logic: Edit files in `TabWrangler Extension/Resources/`
+1. Extension logic: Edit files in `TabWife Extension/Resources/`
 2. Native functionality: Edit `SafariWebExtensionHandler.swift`
 3. UI changes: Modify `popup.html`, `popup.js`, and `popup.css`
 
