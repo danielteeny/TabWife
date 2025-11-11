@@ -9,7 +9,11 @@ A powerful Safari extension for organizing and managing browser tabs. TabWrangle
 - **IP Address Support**: Properly handles IPv4, IPv6, and localhost addresses
 - **Port-Based Matching**: Distinguishes between services on different ports (e.g., `192.168.1.100:8080` vs `192.168.1.100:3000`)
 - **Auto-Detection**: Automatically detects duplicates as you browse
+- **Auto-Updating List**: Duplicate tabs are automatically displayed and updated in real-time
+- **Individual Controls**: Close specific duplicate groups with dedicated close buttons
+- **Pinned Tab Protection**: Pinned tabs are automatically excluded from duplicate detection
 - **Flexible Options**: Choose to keep the newest or oldest duplicate
+- **Match Mode Descriptions**: Dynamic descriptions explain each match mode as you select it
 
 ### 📁 Tab Organization
 - **Group by Domain**: Organize tabs by their root domain
@@ -75,9 +79,12 @@ Click the TabWrangler icon in Safari's toolbar to open the popup interface.
 
 ### Finding Duplicates
 
-1. Click **"Find Duplicates"** to scan for duplicate tabs
-2. Review the list of duplicate groups
-3. Click **"Close Duplicates"** to remove duplicates (keeping one tab per group)
+The duplicate list automatically updates and displays in real-time. You can:
+
+1. **View Duplicates**: Duplicate groups are automatically shown with count badges
+2. **Close Individual Groups**: Click the ✕ button on any duplicate group to close just that group
+3. **Close All Duplicates**: Click **"Close Duplicates"** to remove all duplicates at once (keeping one tab per group)
+4. **Refresh List**: Click **"Find Duplicates"** to manually refresh the duplicate list
 
 ### Organizing Tabs
 
@@ -94,10 +101,13 @@ Click the TabWrangler icon in Safari's toolbar to open the popup interface.
 All settings are accessible directly from the popup:
 
 - **Match Mode**: Choose how duplicates are identified
+  - Dynamic descriptions appear below the dropdown explaining each mode
+  - Descriptions update automatically when you change the selection
 - **Keep Newest**: When enabled, keeps the most recently opened duplicate
 - **Auto-detect**: Automatically detect duplicates as you browse
+- **Scope**: Choose to work with the current window or all windows
 
-Settings are automatically saved when changed.
+Settings are automatically saved when changed, and the duplicate list updates immediately.
 
 ## Project Structure
 
@@ -151,6 +161,15 @@ TabWrangler/
 - `tabUtils.js` contains the core matching algorithms
 - Supports complex URL parsing and comparison
 - Handles edge cases like invalid URLs gracefully
+- Dynamic descriptions help users understand each mode
+
+#### User Interface Enhancements
+- **Auto-Updating Duplicates**: Duplicate list updates automatically when tabs change
+- **Visual Feedback**: Count badges show the number of duplicates in each group
+- **Individual Controls**: Each duplicate group has its own close button
+- **XSS Protection**: URLs are properly escaped for safe display
+- **Pinned Tab Filtering**: Pinned tabs are excluded from all operations
+- **Improved Layout**: Scope selector moved to top for better workflow
 
 ## Development
 
