@@ -37,6 +37,57 @@ h1 {
   color: #86868b;
 }
 
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid #d2d2d7;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1d1d1f;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: #f5f5f7;
+  border-color: #0071e3;
+}
+
+.tab-btn.active {
+  background: #0071e3;
+  border-color: #0071e3;
+  color: white;
+}
+
+/* Tab Content */
+.tab-content {
+  display: block;
+}
+
+.tab-content.hidden {
+  display: none;
+}
+
+/* Loading Spinner */
+.spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .tab-stats {
   display: flex;
   justify-content: space-around;

@@ -6,10 +6,6 @@ let duplicateCache = new Set();
 // Load settings
 async function loadSettings() {
   const result = await browser.storage.sync.get({
-    matchMode: 'fullpath',
-    autoDetect: true,
-    keepNewest: true,
-    notifyDuplicates: true,
     autoOrganizeTabs: true
   });
   userSettings = result;
@@ -37,9 +33,8 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   // Only process when URL changes (means URL has loaded)
   if (changeInfo.url) {
     try {
-      if (userSettings.autoDetect) {
-        await checkForDuplicates(tab);
-      }
+      // Always check for duplicates to update badge
+      await checkForDuplicates(tab);
 
       if (userSettings.autoOrganizeTabs) {
         await autoOrganizeTab(tab);
@@ -64,12 +59,8 @@ async function checkForDuplicates(tab) {
 
   if (duplicates.length > 0 && !duplicateCache.has(tab.id)) {
     duplicateCache.add(tab.id);
-
-    if (userSettings.notifyDuplicates) {
-      // Note: Safari extensions have limited notification support
-      // This will need to be handled through the popup or badge
-      updateBadge(duplicates.length + 1);
-    }
+    // Always update badge to show duplicate count
+    updateBadge(duplicates.length + 1);
   }
 }
 

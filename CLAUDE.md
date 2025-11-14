@@ -73,13 +73,14 @@ popup.js loads
 
 ### Storage Strategy
 
-- **browser.storage.sync**: Settings (matchDomain, matchSubdomain, matchPort, matchPath, matchQuery, matchHash, autoDetect, keepNewest, consolidationThreshold, persistWindowConfig, autoOrganizeTabs)
+- **browser.storage.sync**: Settings (matchDomain, matchSubdomain, matchPort, matchPath, matchQuery, matchHash, keepNewest, consolidationThreshold, persistWindowConfig, autoOrganizeTabs)
   - Syncs across Safari instances
   - Limited to ~10MB
-- **browser.storage.local**: Window configurations (windowDomains, windowKeywords, windowNicknames), sessions, UI state
+- **browser.storage.local**: Window configurations (windowDomains, windowKeywords, windowNicknames), sessions, UI state (activeTab)
   - Local-only, not synced
   - Larger quota
   - Window configs are automatically cleaned up when windows close
+  - activeTab: Persists which tab (duplicates/organization) was last viewed
 
 ## Safari-Specific Limitations & Workarounds
 
@@ -169,15 +170,29 @@ Users build custom match criteria by checking which components must match:
 
 ### popup.js - UI Controller
 
+**UI Structure**:
+- **Two-tab interface**: Duplicates tab and Organization tab
+  - Tab switching persists via `browser.storage.local.activeTab`
+  - Each tab has its own relevant settings and actions
+  - Duplicates tab: Match mode, keep newest, scope selector, duplicate detection
+  - Organization tab: Consolidation, window management, session management
+
 **State Management**:
 - `currentScope`: 'current' (active window) or 'all' (all windows)
 - `userSettings`: Loaded from `browser.storage.sync` with defaults
+
+**Performance Optimization**:
+- `updateStats()` shows tab count immediately, displays spinner while duplicates calculate
+- Duplicate results cached and passed to `updateDuplicatesList()` to avoid double computation
+- With 500+ tabs, perceived load time dramatically improved
 
 **Critical Functions**:
 
 | Function | Notes |
 |----------|-------|
-| `updateDuplicatesList()` | **XSS-protected**: All user data passed through `escapeHtml()` |
+| `switchTab(tabName)` | Switches between 'duplicates' and 'organization' tabs, persists choice to storage |
+| `updateStats()` | Shows tab count immediately, spinner for duplicates, caches results |
+| `updateDuplicatesList(cachedDuplicates)` | **XSS-protected**: All user data passed through `escapeHtml()`. Accepts optional cached duplicates to avoid recomputation |
 | `closeDuplicates()` | Respects `keepNewest` setting, shows confirmation |
 | `getTabs()` | **Always excludes pinned tabs**: `!tab.pinned` |
 | `smartOrganize()` | Uses Safari workaround (create + remove) for tab movement |
@@ -200,11 +215,13 @@ All URLs and titles passed through this function.
 ### background.js - Service Worker
 
 **Key Behaviors**:
-- **Settings loaded on startup**: `loadSettings()` called immediately (line 20) to ensure settings are available even if Safari reloads the background script
+- **Settings loaded on startup**: `loadSettings()` called immediately to ensure settings are available even if Safari reloads the background script
+- **Always auto-detects duplicates**: No gatekeeper setting - always checks for duplicates and updates badge
 - Monitors `browser.tabs.onUpdated` - processes when URL changes (no delay needed, URL already loaded)
 - Maintains `duplicateCache` Set to prevent duplicate notifications
 - Filters special URLs: `about:*`, `chrome:*`, `safari:*`
 - Updates badge with duplicate count via `browser.action.setBadgeText()` (Manifest V3)
+- Only loads `autoOrganizeTabs` setting (other settings handled by popup)
 
 **Auto-Organization** (`autoOrganizeTab()`):
 - Checks domain assignments first, then keyword assignments
@@ -274,6 +291,47 @@ For unassigned:
 - Expandable groups with individual tab titles visible
 - Inline nickname editing with edit icon
 - Tag-based domain/keyword UI with hover-to-remove
+
+## UI/UX Design Decisions
+
+### Two-Tab Interface
+
+**Rationale**: Original single-page popup became overwhelming with 8+ action buttons and mixed concerns (detection vs organization).
+
+**Implementation**:
+- Tab 1 (Duplicates): Scope selector, match settings, duplicate detection/closure
+- Tab 2 (Organization): Window management, consolidation, session management
+- Tab state persists via `browser.storage.local.activeTab`
+- Each tab shows its own total tabs count
+
+**Benefits**:
+- Clear separation of concerns
+- Reduced cognitive load
+- Settings grouped by purpose
+- Easier to navigate for users
+
+### Progressive Loading
+
+**Problem**: With 500+ tabs, duplicate detection is slow (~1-2 seconds). Users couldn't tell if popup was frozen or working.
+
+**Solution**:
+1. Show tab count immediately (fast query)
+2. Display spinner (⏳) in duplicates count
+3. Calculate duplicates asynchronously
+4. Update count when ready
+5. Cache results to avoid recomputation in updateDuplicatesList()
+
+**Impact**: Perceived load time dramatically improved. User gets immediate feedback that extension is working.
+
+### Auto-Detection Always Enabled
+
+**Removed**: "Auto-detect duplicates" checkbox
+
+**Rationale**:
+- 95%+ users kept it enabled
+- Added unnecessary complexity
+- Badge is non-intrusive, so no downside to always detecting
+- Simplified both UI and background script logic
 
 ## Important Implementation Details
 

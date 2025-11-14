@@ -13,6 +13,14 @@
       <p class="subtitle">like a trad wife - it cleans up after you</p>
     </header>
 
+    <div class="tab-navigation">
+      <button class="tab-btn active" data-tab="duplicates">Duplicates</button>
+      <button class="tab-btn" data-tab="organization">Organization</button>
+    </div>
+
+    <!-- Tab 1: Duplicates -->
+    <div class="tab-content" id="duplicates-tab">
+
     <div class="scope-selector">
       <label>
         <input type="radio" name="scope" value="current" checked>
@@ -82,12 +90,34 @@
           <span>Keep newest duplicate</span>
         </label>
       </div>
-      <div class="setting-group">
-        <label class="checkbox-label">
-          <input type="checkbox" id="autoDetect" checked>
-          <span>Auto-detect duplicates</span>
-        </label>
+    </div>
+
+    <div class="actions">
+      <div class="action-section">
+        <h3>Duplicate Management</h3>
+        <button class="action-btn" id="closeDuplicates">
+          <span class="icon">✕</span>
+          Close Duplicates
+        </button>
       </div>
+    </div>
+
+    <div id="duplicatesList" class="duplicates-list"></div>
+
+    </div>
+    <!-- End Tab 1: Duplicates -->
+
+    <!-- Tab 2: Organization -->
+    <div class="tab-content hidden" id="organization-tab">
+
+    <div class="tab-stats">
+      <div class="stat">
+        <span class="stat-label">Open Tabs:</span>
+        <span class="stat-value" id="totalTabs2">0</span>
+      </div>
+    </div>
+
+    <div class="settings-section">
       <div class="setting-group">
         <label for="consolidationThreshold">
           Consolidation threshold: <span id="thresholdValue">3</span> tabs
@@ -110,18 +140,6 @@
         <p class="setting-description">Automatically move new tabs to windows with assigned domains</p>
       </div>
     </div>
-
-    <div class="actions">
-      <div class="action-section">
-        <h3>Duplicate Management</h3>
-        <button class="action-btn" id="closeDuplicates">
-          <span class="icon">✕</span>
-          Close Duplicates
-        </button>
-      </div>
-    </div>
-
-    <div id="duplicatesList" class="duplicates-list"></div>
 
     <div class="actions">
       <div class="action-section">
@@ -159,6 +177,10 @@
     </div>
 
     <div id="sessionsList" class="sessions-list hidden"></div>
+
+    </div>
+    <!-- End Tab 2: Organization -->
+
   </div>
 
   <script src="../utils/tabUtils.js"></script>

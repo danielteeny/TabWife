@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadSettings();
   await updateStats();
   attachEventListeners();
+
+  // Restore last active tab
+  const result = await browser.storage.local.get('activeTab');
+  const activeTab = result.activeTab || 'duplicates';
+  await switchTab(activeTab);
 });
 
 // Load user settings
@@ -19,7 +24,6 @@ async function loadSettings() {
     matchPath: true,
     matchQuery: true,
     matchHash: false,
-    autoDetect: true,
     keepNewest: true,
     consolidationThreshold: 3,
     persistWindowConfig: true,
@@ -36,7 +40,6 @@ async function loadSettings() {
   document.getElementById('matchHash').checked = userSettings.matchHash;
 
   // Update UI controls - other settings
-  document.getElementById('autoDetect').checked = userSettings.autoDetect;
   document.getElementById('keepNewest').checked = userSettings.keepNewest;
   document.getElementById('consolidationThreshold').value = userSettings.consolidationThreshold;
   document.getElementById('thresholdValue').textContent = userSettings.consolidationThreshold;
@@ -52,7 +55,6 @@ async function saveSettings() {
   userSettings.matchPath = document.getElementById('matchPath').checked;
   userSettings.matchQuery = document.getElementById('matchQuery').checked;
   userSettings.matchHash = document.getElementById('matchHash').checked;
-  userSettings.autoDetect = document.getElementById('autoDetect').checked;
   userSettings.keepNewest = document.getElementById('keepNewest').checked;
   userSettings.consolidationThreshold = parseInt(document.getElementById('consolidationThreshold').value);
   userSettings.persistWindowConfig = document.getElementById('persistWindowConfig').checked;
@@ -70,20 +72,33 @@ async function saveSettings() {
 
 // Update tab statistics
 async function updateStats() {
+  // Show tab count immediately (fast operation)
   const tabs = await getTabs();
+  document.getElementById('totalTabs').textContent = tabs.length;
+
+  // Show spinner while duplicates calculate
+  document.getElementById('duplicateCount').innerHTML = '<span class="spinner">⏳</span>';
+
+  // Calculate duplicates async (slower operation)
   const duplicates = TabUtils.findDuplicates(tabs, userSettings);
 
-  document.getElementById('totalTabs').textContent = tabs.length;
+  // Update duplicate count
   document.getElementById('duplicateCount').textContent = duplicates.totalDuplicates;
 
-  // Update duplicates list
-  await updateDuplicatesList();
+  // Update duplicates list, passing cached results to avoid recomputation
+  await updateDuplicatesList(duplicates);
 }
 
 // Update duplicates manifest list
-async function updateDuplicatesList() {
-  const tabs = await getTabs();
-  const duplicates = TabUtils.findDuplicates(tabs, userSettings);
+async function updateDuplicatesList(cachedDuplicates = null) {
+  // Use cached duplicates if provided, otherwise recalculate
+  let duplicates;
+  if (cachedDuplicates) {
+    duplicates = cachedDuplicates;
+  } else {
+    const tabs = await getTabs();
+    duplicates = TabUtils.findDuplicates(tabs, userSettings);
+  }
 
   const listElement = document.getElementById('duplicatesList');
 
@@ -220,8 +235,43 @@ async function getTabs() {
   return tabs.filter(tab => !tab.pinned);
 }
 
+// Switch between tabs
+async function switchTab(tabName) {
+  // Hide all tab content
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.add('hidden');
+  });
+
+  // Remove active class from all tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Show selected tab content
+  document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+
+  // Add active class to clicked button
+  document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+
+  // Save active tab to storage
+  await browser.storage.local.set({ activeTab: tabName });
+
+  // Update tab stats for Organization tab
+  if (tabName === 'organization') {
+    const tabs = await getTabs();
+    document.getElementById('totalTabs2').textContent = tabs.length;
+  }
+}
+
 // Attach event listeners
 function attachEventListeners() {
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      switchTab(btn.dataset.tab);
+    });
+  });
+
   // Scope selector
   document.querySelectorAll('input[name="scope"]').forEach(radio => {
     radio.addEventListener('change', async (e) => {
@@ -305,10 +355,6 @@ function attachEventListeners() {
 
       saveSettings();
     });
-  });
-
-  document.getElementById('autoDetect').addEventListener('change', async () => {
-    await saveSettings();
   });
 
   document.getElementById('keepNewest').addEventListener('change', async () => {
