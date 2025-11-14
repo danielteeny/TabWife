@@ -633,3 +633,344 @@ h1 {
 .move-all-btn:active {
   transform: translateY(0);
 }
+
+/* Window management */
+.window-management {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.window-management.hidden {
+  display: none;
+}
+
+.window-management h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1d1d1f;
+}
+
+.window-config-item {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #f5f5f7;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.window-config-item:last-child {
+  margin-bottom: 0;
+}
+
+.window-config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d2d2d7;
+}
+
+.window-name-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edit-nickname-btn {
+  padding: 4px 6px;
+  font-size: 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #86868b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.edit-nickname-btn:hover {
+  background: #f0f7ff;
+  border-color: #0071e3;
+  color: #0071e3;
+  transform: scale(1.1);
+}
+
+.window-nickname-edit {
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #0071e3;
+  border-radius: 6px;
+  background: white;
+  color: #0071e3;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+  min-width: 150px;
+}
+
+.window-tab-count {
+  font-size: 11px;
+  color: #86868b;
+  font-weight: 500;
+}
+
+.window-config-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.window-domains-select {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  border: 1px solid #d2d2d7;
+  border-radius: 6px;
+  background: white;
+  color: #1d1d1f;
+  transition: border-color 0.2s ease;
+  min-height: 80px;
+}
+
+.window-domains-select:focus {
+  outline: none;
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+}
+
+.window-domains-select option {
+  padding: 4px;
+}
+
+.save-window-config-btn {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: #0071e3;
+  color: white;
+  align-self: flex-end;
+}
+
+.save-window-config-btn:hover {
+  background: #0077ed;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 113, 227, 0.3);
+}
+
+.save-window-config-btn:active {
+  transform: translateY(0);
+}
+
+/* Assigned domain visual feedback */
+.window-domains-select option.assigned-domain {
+  background: #e6f3ff;
+  font-weight: 600;
+  color: #0071e3;
+}
+
+.assignment-summary {
+  font-size: 11px;
+  color: #86868b;
+  padding: 6px 8px;
+  background: #f5f5f7;
+  border-radius: 4px;
+  font-style: italic;
+}
+
+.assignment-badge {
+  display: inline-block;
+  background: #0071e3;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.suggestion-assigned-badge {
+  display: inline-block;
+  background: #ffcc00;
+  color: #1d1d1f;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.suggestion-keyword-badge {
+  display: inline-block;
+  background: #fff4cc;
+  color: #1d1d1f;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+  border: 1px solid #ffcc00;
+}
+
+/* Tag-based domain/keyword UI */
+.tag-section {
+  margin-bottom: 12px;
+}
+
+.tag-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #86868b;
+  margin-bottom: 6px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.domain-tag, .keyword-tag {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  line-height: 1;
+}
+
+.domain-tag.unassigned {
+  background: #f5f5f7;
+  color: #1d1d1f;
+  border: 1px solid #d2d2d7;
+}
+
+.domain-tag.unassigned:hover {
+  background: #e8e8ed;
+  border-color: #0071e3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.domain-tag.assigned {
+  background: #e6f3ff;
+  color: #0071e3;
+  font-weight: 600;
+  border: 1px solid #0071e3;
+}
+
+.domain-tag.assigned:hover {
+  background: #d0e8ff;
+}
+
+.keyword-tag {
+  background: #fff4cc;
+  color: #1d1d1f;
+  font-weight: 500;
+  border: 1px solid #ffcc00;
+}
+
+.keyword-tag:hover {
+  background: #ffe699;
+}
+
+.tag-remove {
+  opacity: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff3b30;
+  margin-left: 2px;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.domain-tag.assigned:hover .tag-remove,
+.keyword-tag:hover .tag-remove {
+  opacity: 1;
+}
+
+.tag-remove:hover {
+  transform: scale(1.2);
+}
+
+.tag-count {
+  opacity: 0.7;
+  font-size: 11px;
+}
+
+.empty-tags-message {
+  color: #86868b;
+  font-size: 12px;
+  font-style: italic;
+  padding: 4px 0;
+}
+
+/* Keyword input */
+.keyword-input-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.keyword-input {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 13px;
+  border: 1px solid #d2d2d7;
+  border-radius: 6px;
+  background: white;
+  color: #1d1d1f;
+  transition: border-color 0.2s ease;
+}
+
+.keyword-input:focus {
+  outline: none;
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+}
+
+.add-keyword-btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: #ffcc00;
+  color: #1d1d1f;
+}
+
+.add-keyword-btn:hover {
+  background: #ffdb4d;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(255, 204, 0, 0.3);
+}
+
+.add-keyword-btn:active {
+  transform: translateY(0);
+}

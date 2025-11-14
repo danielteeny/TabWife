@@ -67,6 +67,20 @@
         <input type="range" id="consolidationThreshold" min="2" max="10" value="3" class="threshold-slider">
         <p class="setting-description">Minimum tabs in a window to suggest it as consolidation target</p>
       </div>
+      <div class="setting-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="persistWindowConfig" checked>
+          <span>Persist window configurations</span>
+        </label>
+        <p class="setting-description">Remember window nicknames and domain assignments across sessions</p>
+      </div>
+      <div class="setting-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="autoOrganizeTabs" checked>
+          <span>Auto-organize tabs by assigned domains</span>
+        </label>
+        <p class="setting-description">Automatically move new tabs to windows with assigned domains</p>
+      </div>
     </div>
 
     <div class="actions">
@@ -96,10 +110,15 @@
           <span class="icon">✨</span>
           Smart Organize
         </button>
+        <button class="action-btn" id="manageWindows">
+          <span class="icon">🪟</span>
+          Manage Windows
+        </button>
       </div>
     </div>
 
     <div id="consolidationSuggestions" class="consolidation-suggestions hidden"></div>
+    <div id="windowManagement" class="window-management hidden"></div>
 
     <div class="actions">
       <div class="action-section">

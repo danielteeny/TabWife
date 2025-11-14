@@ -73,12 +73,13 @@ popup.js loads
 
 ### Storage Strategy
 
-- **browser.storage.sync**: Settings (matchMode, autoDetect, keepNewest, consolidationThreshold)
+- **browser.storage.sync**: Settings (matchMode, autoDetect, keepNewest, consolidationThreshold, persistWindowConfig, autoOrganizeTabs)
   - Syncs across Safari instances
   - Limited to ~10MB
-- **browser.storage.local**: Sessions, UI state, hasSeenMoveWarning flag
+- **browser.storage.local**: Window configurations (windowDomains, windowKeywords, windowNicknames), sessions, UI state
   - Local-only, not synced
   - Larger quota
+  - Window configs are automatically cleaned up when windows close
 
 ## Safari-Specific Limitations & Workarounds
 
@@ -86,14 +87,23 @@ popup.js loads
 
 **Problem**: Safari doesn't support `browser.tabs.move(tabId, {windowId})`
 
-**Workaround** (see `popup.js:356-369`, `popup.js:574-584`):
+**Workaround** (used throughout codebase):
 ```javascript
+// Preserve active state for smart focus behavior
+const shouldActivate = tab.active;
+
 // Create new tab in target window
 await browser.tabs.create({
   windowId: targetWindowId,
   url: tab.url,
-  active: false
+  active: shouldActivate  // true if user was viewing it, false for background tabs
 });
+
+// Switch focus if the original tab was active
+if (shouldActivate) {
+  await browser.windows.update(targetWindowId, { focused: true });
+}
+
 // Remove original tab
 await browser.tabs.remove(originalTabId);
 ```
@@ -101,7 +111,11 @@ await browser.tabs.remove(originalTabId);
 **Side Effects**:
 - Page reloads completely
 - Lost: scroll position, form data, history, session storage
-- One-time warning dialog exists (currently disabled at `popup.js:514-517` for testing)
+- One-time warning dialog exists (currently disabled for testing)
+
+**Focus Behavior**:
+- Active tabs (user viewing): window switches focus automatically - keeps user engaged with their work
+- Background tabs (bulk operations): no focus switch - prevents jarring interruptions
 
 ### Other Safari Limitations
 
@@ -109,6 +123,8 @@ await browser.tabs.remove(originalTabId);
 - No `groupId` property in tab objects
 - Limited `browser.notifications` API - uses badge + alert() instead
 - Pinned tabs must be manually filtered (`!tab.pinned`) in all operations
+- Manifest V3: Use `browser.action` not `browser.browserAction` for badge operations
+- Background scripts can be unloaded/reloaded by Safari - always load settings at top level, not just in `onInstalled`
 
 ## Core Components
 
@@ -122,8 +138,12 @@ await browser.tabs.remove(originalTabId);
 | `matchTabs(tab1, tab2, mode)` | Compares two tabs using one of 6 match modes |
 | `getRootDomain(hostname)` | **IP-aware**: Returns full IP for IPv4/IPv6/localhost; extracts root domain for hostnames |
 | `groupByDomain(tabs)` | Groups tabs by domain (key format: `domain:port` if non-default port) |
-| `generateConsolidationSuggestions(windows, threshold)` | Identifies "home window" (most tabs per domain), suggests moving "stray tabs" to consolidate |
+| `generateConsolidationSuggestions(windows, threshold)` | Prioritizes assigned domains, then keyword matches, then unassigned domains meeting threshold |
 | `analyzeDomainDistribution(windows)` | Maps tab distribution across windows for each domain |
+| `getWindowNickname(windowId)` | Retrieves custom nickname from storage |
+| `getWindowDomains(windowId)` | Retrieves assigned domains array from storage |
+| `formatWindowDisplay(windowId)` | Returns nickname or "Window {id}" |
+| `getAllDomains(windows)` | Returns sorted array of all unique domains (excludes pinned tabs) |
 
 **Match Modes** (critical for deduplication):
 1. `exact` - Full URL including hash
@@ -153,7 +173,10 @@ await browser.tabs.remove(originalTabId);
 | `getTabs()` | **Always excludes pinned tabs**: `!tab.pinned` |
 | `smartOrganize()` | Uses Safari workaround (create + remove) for tab movement |
 | `moveSelectedTabs()` / `moveAllTabs()` | Multi-window consolidation via workaround |
-| `showMoveWarningIfNeeded()` | **Currently disabled** (lines 514-517) for testing; re-enable before release |
+| `loadWindowManagement()` | Renders unified tag-based UI for domains and keywords |
+| `organizeExistingTabs(targetWindowId)` | Immediately moves all existing tabs matching assigned domains/keywords to target window (background operation) |
+| `saveWindowNickname()` / `saveWindowDomains()` / `saveWindowKeywords()` | Persist window configurations to `browser.storage.local` |
+| `getWindowKeywords(windowId)` | Retrieves assigned keywords array from storage |
 
 **XSS Protection** (lines 31-35):
 ```javascript
@@ -168,33 +191,80 @@ All URLs and titles passed through this function.
 ### background.js - Service Worker
 
 **Key Behaviors**:
-- Monitors `browser.tabs.onCreated` and `browser.tabs.onUpdated`
-- **1-second delay** after tab creation allows URL to fully load before duplicate check
+- **Settings loaded on startup**: `loadSettings()` called immediately (line 20) to ensure settings are available even if Safari reloads the background script
+- Monitors `browser.tabs.onUpdated` - processes when URL changes (no delay needed, URL already loaded)
 - Maintains `duplicateCache` Set to prevent duplicate notifications
 - Filters special URLs: `about:*`, `chrome:*`, `safari:*`
-- Updates badge with duplicate count via `browser.browserAction.setBadgeText()`
+- Updates badge with duplicate count via `browser.action.setBadgeText()` (Manifest V3)
 
-## Smart Domain Consolidation
+**Auto-Organization** (`autoOrganizeTab()`):
+- Checks domain assignments first, then keyword assignments
+- Validates target window exists before moving tabs
+- Automatically cleans up stale window assignments when detected
+- **Focus behavior**: If tab was active (user is looking at it), switches focus to target window; background tabs move silently
+- Listens to `browser.windows.onRemoved` to clean up assignments when windows close
+
+**Performance**: No artificial delays - `onUpdated` fires when URL is already loaded, allowing immediate processing.
+
+## Window Management & Auto-Organization
+
+### Window Configuration System
+
+**Storage** (`browser.storage.local`):
+- `windowDomains`: Maps window ID → array of assigned domains (e.g., `{3416290: ["youtube.com", "netflix.com"]}`)
+- `windowKeywords`: Maps window ID → array of keywords for topic-based matching (e.g., `{3416417: ["3d printing", "cad"]}`)
+- `windowNicknames`: Maps window ID → custom nickname string
+
+**Domain Assignment**:
+- Domains shown as tags in "Manage Windows" UI
+- Unassigned domains: gray tags, clickable to assign
+- Assigned domains: blue tags with X button to unassign
+- Domains sorted by tab count (most tabs first)
+- Pinned tabs excluded from domain suggestions
+
+**Keyword Assignment**:
+- Keywords shown as yellow tags
+- Match against tab URL, title, and domain (case-insensitive)
+- Input field supports Enter key or Add button
+- Use for topic-based organization (e.g., "machine learning", "recipes")
+
+**Auto-Organization Behavior**:
+- When tab created/updated, checks domain assignments first, then keyword assignments
+- Active tabs (user is viewing): moves AND switches focus to target window
+- Background tabs: moves silently without switching focus
+- Manual assignment via UI (`organizeExistingTabs()`): moves all matching existing tabs immediately in background
+- Stale window cleanup: automatically removes assignments when windows close or don't exist
+
+### Smart Domain Consolidation
 
 **Algorithm** (`tabUtils.js:generateConsolidationSuggestions()`):
 
-1. Analyze domain distribution across all windows
-2. For each domain, identify "home window" = window with most tabs for that domain
-3. Only suggest consolidation if home window has ≥ threshold tabs (default: 3)
-4. Collect "stray tabs" from other windows
-5. Sort suggestions by impact (most stray tabs first)
+Priority order:
+1. **Assigned suggestions**: Domains assigned to specific windows (ignores threshold)
+2. **Keyword suggestions**: Tabs matching keywords assigned to windows
+3. **Unassigned suggestions**: Domains meeting threshold, suggesting window with most tabs
+
+For unassigned:
+- Analyze domain distribution across all windows
+- For each domain, identify "home window" = window with most tabs for that domain
+- Only suggest consolidation if home window has ≥ threshold tabs (default: 3)
+- Collect "stray tabs" from other windows
+- Sort by impact (most stray tabs first)
 
 **User Controls**:
 - Threshold slider (2-10 tabs) in settings section
 - "Analyze Organization" - shows suggestions with checkboxes
 - "Smart Organize" - one-click automatic consolidation
 - Individual "Move Selected" / "Move All" buttons per domain
+- "Manage Windows" - assign domains/keywords to specific windows
 
 **UI Features**:
 - Click tab titles → switches to that tab and focuses window
 - Click window IDs → focuses that window
 - Checkboxes per source window for selective moving
 - Expandable groups with individual tab titles visible
+- Inline nickname editing with edit icon
+- Tag-based domain/keyword UI with hover-to-remove
 
 ## Important Implementation Details
 

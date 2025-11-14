@@ -193,12 +193,28 @@ const TabUtils = {
     return distribution;
   },
 
-  // Generate consolidation suggestions based on threshold
-  generateConsolidationSuggestions(windows, threshold = 3) {
+  // Generate consolidation suggestions based on threshold, domain assignments, and keywords
+  async generateConsolidationSuggestions(windows, threshold = 3) {
     const distribution = this.analyzeDomainDistribution(windows);
-    const suggestions = [];
+    const assignedSuggestions = [];
+    const keywordSuggestions = [];
+    const unassignedSuggestions = [];
 
-    // For each domain, find if there's a "home" window with enough tabs
+    // Load all domain and keyword assignments
+    const result = await browser.storage.local.get(['windowDomains', 'windowKeywords']);
+    const allDomainAssignments = result.windowDomains || {};
+    const allKeywordAssignments = result.windowKeywords || {};
+
+    // Build reverse mapping: domain -> assigned window ID
+    const domainToWindow = {};
+    for (const windowId in allDomainAssignments) {
+      const domains = allDomainAssignments[windowId];
+      domains.forEach(domain => {
+        domainToWindow[domain] = parseInt(windowId);
+      });
+    }
+
+    // For each domain, check if it has an assignment
     for (const domain in distribution) {
       const domainData = distribution[domain];
       const windowIds = Object.keys(domainData.windows);
@@ -206,47 +222,191 @@ const TabUtils = {
       // Skip if all tabs are in one window
       if (windowIds.length === 1) continue;
 
-      // Find the window with the most tabs for this domain
-      let homeWindowId = null;
-      let maxTabCount = 0;
+      const assignedWindowId = domainToWindow[domain];
 
-      windowIds.forEach(windowId => {
-        const count = domainData.windows[windowId].tabs.length;
-        if (count > maxTabCount) {
-          maxTabCount = count;
-          homeWindowId = windowId;
-        }
-      });
-
-      // Only suggest if home window meets threshold
-      if (maxTabCount < threshold) continue;
-
-      // Collect stray tabs from other windows
-      const strayTabs = [];
-      windowIds.forEach(windowId => {
-        if (windowId !== homeWindowId) {
-          domainData.windows[windowId].tabs.forEach(tab => {
-            strayTabs.push({
-              tab: tab,
-              fromWindowId: parseInt(windowId)
+      if (assignedWindowId) {
+        // Domain has an assignment - suggest moving all tabs to assigned window
+        const strayTabs = [];
+        windowIds.forEach(windowId => {
+          if (parseInt(windowId) !== assignedWindowId) {
+            domainData.windows[windowId].tabs.forEach(tab => {
+              strayTabs.push({
+                tab: tab,
+                fromWindowId: parseInt(windowId)
+              });
             });
+          }
+        });
+
+        if (strayTabs.length > 0) {
+          const homeWindowTabCount = domainData.windows[assignedWindowId]
+            ? domainData.windows[assignedWindowId].tabs.length
+            : 0;
+
+          assignedSuggestions.push({
+            domain: domain,
+            homeWindowId: assignedWindowId,
+            homeWindowTabCount: homeWindowTabCount,
+            strayTabs: strayTabs,
+            totalStrayTabs: strayTabs.length,
+            isAssigned: true
           });
         }
-      });
+      } else {
+        // No assignment - use original logic (most tabs wins + threshold)
+        let homeWindowId = null;
+        let maxTabCount = 0;
 
-      if (strayTabs.length > 0) {
-        suggestions.push({
-          domain: domain,
-          homeWindowId: parseInt(homeWindowId),
-          homeWindowTabCount: maxTabCount,
-          strayTabs: strayTabs,
-          totalStrayTabs: strayTabs.length
+        windowIds.forEach(windowId => {
+          const count = domainData.windows[windowId].tabs.length;
+          if (count > maxTabCount) {
+            maxTabCount = count;
+            homeWindowId = windowId;
+          }
         });
+
+        // Only suggest if home window meets threshold
+        if (maxTabCount < threshold) continue;
+
+        // Collect stray tabs from other windows
+        const strayTabs = [];
+        windowIds.forEach(windowId => {
+          if (windowId !== homeWindowId) {
+            domainData.windows[windowId].tabs.forEach(tab => {
+              strayTabs.push({
+                tab: tab,
+                fromWindowId: parseInt(windowId)
+              });
+            });
+          }
+        });
+
+        if (strayTabs.length > 0) {
+          unassignedSuggestions.push({
+            domain: domain,
+            homeWindowId: parseInt(homeWindowId),
+            homeWindowTabCount: maxTabCount,
+            strayTabs: strayTabs,
+            totalStrayTabs: strayTabs.length,
+            isAssigned: false
+          });
+        }
       }
     }
 
-    // Sort by number of stray tabs (most impactful first)
-    return suggestions.sort((a, b) => b.totalStrayTabs - a.totalStrayTabs);
+    // Check for keyword matches across all tabs
+    for (const windowId in allKeywordAssignments) {
+      const keywords = allKeywordAssignments[windowId];
+      const targetWindowId = parseInt(windowId);
+      const keywordMatchedTabs = {};
+
+      // For each window, check all tabs for keyword matches
+      windows.forEach(window => {
+        if (window.id === targetWindowId) return; // Skip tabs already in target window
+
+        window.tabs.forEach(tab => {
+          try {
+            const tabUrl = tab.url.toLowerCase();
+            const tabTitle = (tab.title || '').toLowerCase();
+            const url = new URL(tab.url);
+            const tabDomain = url.hostname.toLowerCase();
+
+            // Check each keyword
+            for (const keyword of keywords) {
+              const keywordLower = keyword.toLowerCase();
+              if (tabUrl.includes(keywordLower) || tabTitle.includes(keywordLower) || tabDomain.includes(keywordLower)) {
+                // This tab matches a keyword
+                if (!keywordMatchedTabs[keyword]) {
+                  keywordMatchedTabs[keyword] = [];
+                }
+                keywordMatchedTabs[keyword].push({
+                  tab: tab,
+                  fromWindowId: window.id
+                });
+                break; // Only count each tab once per window
+              }
+            }
+          } catch (e) {
+            // Skip invalid URLs
+          }
+        });
+      });
+
+      // Create suggestions for each keyword that has matches
+      for (const keyword in keywordMatchedTabs) {
+        const strayTabs = keywordMatchedTabs[keyword];
+        if (strayTabs.length > 0) {
+          keywordSuggestions.push({
+            domain: `Keyword: "${keyword}"`,
+            homeWindowId: targetWindowId,
+            homeWindowTabCount: 0, // Keyword suggestions don't have a home tab count
+            strayTabs: strayTabs,
+            totalStrayTabs: strayTabs.length,
+            isKeywordMatch: true,
+            keyword: keyword
+          });
+        }
+      }
+    }
+
+    // Sort all lists by number of stray tabs
+    assignedSuggestions.sort((a, b) => b.totalStrayTabs - a.totalStrayTabs);
+    keywordSuggestions.sort((a, b) => b.totalStrayTabs - a.totalStrayTabs);
+    unassignedSuggestions.sort((a, b) => b.totalStrayTabs - a.totalStrayTabs);
+
+    // Return assigned suggestions first, then keyword matches, then unassigned
+    return [...assignedSuggestions, ...keywordSuggestions, ...unassignedSuggestions];
+  },
+
+  // Window metadata helpers
+  async getWindowNickname(windowId) {
+    try {
+      const result = await browser.storage.local.get('windowNicknames');
+      const nicknames = result.windowNicknames || {};
+      return nicknames[windowId] || null;
+    } catch (e) {
+      console.error('Error getting window nickname:', e);
+      return null;
+    }
+  },
+
+  async getWindowDomains(windowId) {
+    try {
+      const result = await browser.storage.local.get('windowDomains');
+      const domains = result.windowDomains || {};
+      return domains[windowId] || [];
+    } catch (e) {
+      console.error('Error getting window domains:', e);
+      return [];
+    }
+  },
+
+  async formatWindowDisplay(windowId) {
+    const nickname = await this.getWindowNickname(windowId);
+    return nickname || `Window ${windowId}`;
+  },
+
+  // Get all unique domains from a set of windows (excluding pinned tabs)
+  getAllDomains(windows) {
+    const domainsSet = new Set();
+
+    windows.forEach(window => {
+      window.tabs.forEach(tab => {
+        // Skip pinned tabs
+        if (tab.pinned) return;
+
+        try {
+          const url = new URL(tab.url);
+          const domain = this.getRootDomain(url.hostname);
+          const key = url.port ? `${domain}:${url.port}` : domain;
+          domainsSet.add(key);
+        } catch (e) {
+          // Skip invalid URLs
+        }
+      });
+    });
+
+    return Array.from(domainsSet).sort();
   }
 };
 
